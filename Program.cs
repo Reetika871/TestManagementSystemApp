@@ -15,7 +15,9 @@ class Program
             Console.WriteLine("1. View all users");
             Console.WriteLine("2. Add a new component (Feature 1)");
             Console.WriteLine("3. Add a new test (Feature 2)");
-            Console.WriteLine("4. View test report (Feature 4)");
+            Console.WriteLine("4. Add a new user (Feature 3)");
+            Console.WriteLine("5. View test report (Feature 4)");
+            Console.WriteLine("6. Update a test's status (Feature 5)");
             Console.Write("Enter your choice: ");
             string choice = Console.ReadLine();
 
@@ -81,12 +83,54 @@ class Program
                     }
                     break;
 
-                case "4":
+                    case "4":
+                    Console.Write("\nEnter username: ");
+                    string newUsername = Console.ReadLine();
+
+                    Console.Write("Enter role (e.g., Admin, Developer, Tester): ");
+                    string newRole = Console.ReadLine();
+
+                    try
+                    {
+                        userService.AddUser(newUsername, newRole);
+                        Console.WriteLine("User added successfully!");
+                    }
+                    catch (Exception ex)
+                    {
+                        Console.WriteLine($"Error: {ex.Message}");
+                    }
+                    break;
+
+
+                case "5":
                     var report = userService.GetTestReport();
-                    Console.WriteLine("\n🧪 Test Report:");
+                    Console.WriteLine("\n Test Report:");
                     foreach (var test in report)
                     {
                         Console.WriteLine($"Title: {test.Title} – Status: {test.Status}");
+                    }
+                    break;
+
+                case "6":
+                    Console.Write("\nEnter the Test ID to update: ");
+                    if (int.TryParse(Console.ReadLine(), out int testIdToUpdate))
+                    {
+                        Console.Write("Enter new status (To be tested / Under Testing / Completed): ");
+                        string newStatus = Console.ReadLine();
+
+                        try
+                        {
+                            userService.UpdateTestStatus(testIdToUpdate, newStatus);
+                            Console.WriteLine("✅ Test status updated successfully!");
+                        }
+                        catch (Exception ex)
+                        {
+                            Console.WriteLine($"❌ Error: {ex.Message}");
+                        }
+                    }
+                    else
+                    {
+                        Console.WriteLine("❌ Invalid Test ID.");
                     }
                     break;
 

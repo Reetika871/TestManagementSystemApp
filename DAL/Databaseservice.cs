@@ -29,7 +29,7 @@ namespace TestManagementSystemApp.DAL
             return users;
         }
 
-        // ✅ Feature 1: Add new component for a project
+        // Feature 1: Add new component for a project
         public void AddComponent(string name, int projectId)
         {
             using (MySqlConnection conn = new MySqlConnection(connectionString))
@@ -59,7 +59,21 @@ namespace TestManagementSystemApp.DAL
                 cmd.ExecuteNonQuery();
             }
         }
-        // ✅ Feature 4: View all test cases with status
+        // Feature 3: Adding a new user
+        public void AddUser(string username, string role)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                string query = "INSERT INTO Users (username, role) VALUES (@username, @role)";
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@username", username);
+                cmd.Parameters.AddWithValue("@role", role);
+                cmd.ExecuteNonQuery();
+            }
+        }
+
+        // Feature 4: View all test cases with status
         public List<(string Title, string Status)> GetAllTests()
         {
             List<(string, string)> tests = new List<(string, string)>();
@@ -79,10 +93,19 @@ namespace TestManagementSystemApp.DAL
 
             return tests;
         }
-  
-
-
-
-}
+        // Feature 5: Update test status
+        public void UpdateTestStatus(int testId, string newStatus)
+        {
+            using (MySqlConnection conn = new MySqlConnection(connectionString))
+            {
+                conn.Open();
+                string query = "UPDATE Test SET status = @status WHERE test_id = @testId;";
+                MySqlCommand cmd = new MySqlCommand(query, conn);
+                cmd.Parameters.AddWithValue("@status", newStatus);
+                cmd.Parameters.AddWithValue("@testId", testId);
+                cmd.ExecuteNonQuery();
+            }
+        }
+    }
 }
 
